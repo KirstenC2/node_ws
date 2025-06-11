@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>WebSocket Test</title>
+</head>
+<body>
+  <h2>💬 WebSocket 測試</h2>
+  <input type="text" id="msgInput" placeholder="輸入訊息">
+  <button onclick="sendMessage()">送出</button>
+  <div id="log" style="margin-top: 20px;"></div>
+
+  <script>
+    const socket = new WebSocket("ws://localhost:8080"); // 與 server 連線
+    const log = document.getElementById("log");
+
+    socket.onopen = () => {
+      log.innerHTML += "✅ 已連線到 WebSocket 伺服器<br>";
+    };
+
+    socket.onmessage = (event) => {
+      log.innerHTML += "📩 收到訊息： " + event.data + "<br>";
+    };
+
+    socket.onclose = () => {
+      log.innerHTML += "❌ 與伺服器斷線<br>";
+    };
+
+    function sendMessage() {
+      const input = document.getElementById("msgInput");
+      const message = input.value;
+      socket.send(message);
+      log.innerHTML += "📤 已送出： " + message + "<br>";
+      input.value = "";
+    }
+  </script>
+</body>
+</html>
